@@ -1,3 +1,7 @@
+
+const mykey = config.MY_KEY;
+const secretkey = config.SECRET_KEY; 
+
 let restaurants,
   neighborhoods,
   cuisines
