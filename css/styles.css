@@ -10,16 +10,17 @@ body,td,th,p{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.6rem;
 	color: #333;
-	line-height: 1.5;
+  line-height: 1.5;
 }
 body {
-	background-color: #fdfdfd;
+  background-color: #fdfdfd;
 	margin: 0;
 	position:relative;
+  overflow-x: hidden;
 }
 ul, li {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 1.6rem;
+	font-size: 2rem;
 	color: #333;
 }
 a {
@@ -47,14 +48,14 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 #footer {
   background-color: #444;
   color: #aaa;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   letter-spacing: 1px;
   padding: 25px;
   text-align: center;
   text-transform: uppercase;
+  overflow: hidden;
 }
 /* ====================== Navigation ====================== */
-/* TODO: why does header look different on main vs restaurant page? */
 nav {
   width: 100%;
   height: 80px;
@@ -68,18 +69,19 @@ nav h1 {
 }
 nav h1 a {
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 200;
   letter-spacing: 10px;
   text-transform: uppercase;
 }
 #breadcrumb {
-    padding: 10px 40px 16px;
+    padding: 10px 48px 16px;
     list-style: none;
     background-color: #eee;
     font-size: 1.6rem;
     margin: 0;
     width: 100%;
+    overflow: hidden;
 }
 
 /* Display list items side by side */
@@ -112,30 +114,31 @@ nav h1 a {
   background-color: #ccc;
 }
 /* ====================== Restaurant Filtering ====================== */
-/* TODO: Make filter fit in smaller width screen */
 .filter-options {
   width: 100%;
-  height: 50px;
+  height: auto;
   background-color: #3397DB;
   align-items: center;
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 .filter-options h2 {
   color: white;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: normal;
   line-height: 1;
   margin: 0 20px;
+  padding: 10px 10px 0;
 }
 .filter-options select {
   background-color: white;
   border: 1px solid #fff;
   font-family: Arial,sans-serif;
   font-size: 1.6rem;
-  height: 35px;
+  height: 48px;
   letter-spacing: 0;
-  margin: 10px;
+  margin: 15px;
   padding: 0 10px;
   width: 200px;
 }
@@ -213,11 +216,10 @@ nav h1 a {
   height: 100%;
   width: 100%;
 }
-/* TODO: Fix issue with footer and width */
 .inside #footer {
   bottom: 0;
   position: absolute;
-  width: 90%;
+  overflow: hidden;
 }
 #restaurant-name {
   color: #f18200;
@@ -286,14 +288,27 @@ nav h1 a {
   color: #666;
 }
 
-}  /* ----end mobile styles: min-width 300px---- */
+}  /* ----end styles: min-width 300px---- */
+
+@media screen and (min-width:500px) {
+
+  #footer {
+    width: 100vw;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+} /* ----end styles: min-width 500px----  */
 
 @media screen and (min-width:1000px) {
 
   #breadcrumb {
     width: calc(50% - 80px);
-}
-
+  }
+  .filter-options {
+    height: 50px;
+    flex-direction: row;
+  }
   .inside #map-container {
     height: 87%;
     position: fixed;
@@ -301,13 +316,16 @@ nav h1 a {
     top: 80px;
     width: 50%;
   }
-
   #restaurant-container, #reviews-container {
     width: 47%;
   }
-  
   #restaurant-container {
     padding: 140px 40px 30px;
+  }
+  #footer {
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    width: 100%;
   }
 
 } /* ----end styles for min-width 1000px---- */
