@@ -147,11 +147,20 @@ class DBHelper {
   }
 
   /**
-   * Restaurant image URL.
+   * Restaurant small image URL. Small images on main page.
    */
-  static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+  static imageUrlForRestaurantSmall(restaurant) {
+      return(`/img/${restaurant.id}-small.jpg`)
+    }
+/**
+   * Restaurant large image URL.Large images on individual restaurant pages
+   */
+  static imageUrlForRestaurantLarge(restaurant) {
+      return(`/img/${restaurant.id}-large.jpg`)
   }
+
+
+  //return (`/img/${restaurant.photograph}`);
 
   /**
    * Map marker for a restaurant.
