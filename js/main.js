@@ -9,6 +9,21 @@ var map
 var markers = []
 
 /**
+ * Register Service Worker
+ */
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(function(registration) {
+      console.log("service worker registered", registration);
+    })
+    .catch(function(error) {
+      console.log("Service worker failed to register", error);
+    });
+  }
+
+
+/**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
