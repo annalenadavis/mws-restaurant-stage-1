@@ -8,6 +8,27 @@ const cacheFiles = [
     './js/dbhelper.js',
     './js/main.js',
     './js/restaurant_info.js',
+    './data/restaurants.json',
+    './img/1-large.jpg',
+    './img/2-large.jpg',
+    './img/3-large.jpg',
+    './img/4-large.jpg',
+    './img/5-large.jpg',
+    './img/6-large.jpg',
+    './img/7-large.jpg',
+    './img/8-large.jpg',
+    './img/9-large.jpg',
+    './img/10-large.jpg',
+    './img/1-small.jpg',
+    './img/2-small.jpg',
+    './img/3-small.jpg',
+    './img/4-small.jpg',
+    './img/5-small.jpg',
+    './img/6-small.jpg',
+    './img/7-small.jpg',
+    './img/8-small.jpg',
+    './img/9-small.jpg',
+    './img/10-small.jpg'
 ]
 // TODO: Add images to cacheFiles or separate image cache
 
@@ -47,8 +68,8 @@ self.addEventListener('fetch', function(event) {
             if(response) {
                 console.log('serviceWorker found in cache', event.request.url);
                 return response;
+                // return fetch(event.request);
             }
-            return fetch(event.request);
         })
     )
 })
