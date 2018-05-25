@@ -1,6 +1,4 @@
 
-// const mykey = config.MY_KEY;
-// const secretkey = config.SECRET_KEY; 
 
 let restaurants,
   neighborhoods,
@@ -15,10 +13,10 @@ if('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('/sw.js')
     .then(function(registration) {
-      console.log("service worker registered", registration);
+      console.log("ServiceWorker registered", registration);
     })
     .catch(function(error) {
-      console.log("Service worker failed to register", error);
+      console.log("ServiceWorker failed to register", error);
     });
   }
 
