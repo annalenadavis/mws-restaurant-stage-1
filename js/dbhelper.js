@@ -13,6 +13,7 @@ class DBHelper {
   }
 
 //TODO: refactor XMLHttpRequests to use fetch API instead X
+//TODO: Open an indexedDB and store json responses from server in it
 //TODO: create a yeoman file, then move everything into the app folder so build tool can pull from there
 //TODO: create gulp file- edit boilerplate Yoeman code>> add broswerify to get SW to work, sw task, babelify, vinyl
 //TODO: create a manifest.json file

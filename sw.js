@@ -1,8 +1,46 @@
+//=========Set up the indexedDB in the broswer===========
+let restaurantDB;
+const request = indexedDB.open("restaurantDB", 1);
 
+request.onerror = function(event) {
+    // Handle errors.
+    console.log("Database error: " + event.target.errorCode);
+};
+
+//Create an object store for restaurant data
+request.onupgradeneeded = function(event) {
+    restaurantDB = event.target.result;
+    //create an objectStore for restaurant data
+    const objectStore = restaurantDB.createObjectStore("restaurants", {keyPath : "id" });
+    addRestaurantData();
+    //create index to search by id, name, neighborhood, or cuisine type
+    objectStore.createIndex("id", "id");
+    objectStore.createIndex("restaurant", "name");
+    objectStore.createIndex("neighborhood", "neighborhood");
+    objectStore.createIndex("cuisine", "cuisine_type");
+}
+
+//TODO: either get the transaction to work to add the data to the indexedDB
+//OR import the idb promise library and use that instead
+
+
+//TODO: add restaurant data to indexedDB objectStore
+function addRestaurantData() {
+    console.log("running");
+    indexedDB(restaurantsDB).transaction(["restaurants"], "readwrite")
+    .then(function(transaction) {
+        DBHelper.fetchRestaurantById().forEach(function(restaurant) {
+            objectStore.add(restaurant);
+        });
+    })
+}
+
+
+
+//============Set up the Service Worker==============
 const cacheName = 'v2';
 const cacheFiles = [
     './',
-    './data/restaurants.json',
     './index.html',
     './restaurant.html',
     './css/styles.css',
