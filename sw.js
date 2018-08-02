@@ -1,40 +1,40 @@
-//=========Set up the indexedDB in the broswer===========
-let restaurantDB;
-const request = indexedDB.open("restaurantDB", 1);
+// // //=========Set up the indexedDB in the broswer===========
+// let restaurantDB;
+// const request = indexedDB.open("restaurantDB", 1);
+//  request.onerror = function(event) {
+//     // Handle errors.
+//     console.log("Database error: " + event.target.errorCode);
+// };
+//  //Create an object store for restaurant data
+// request.onupgradeneeded = function(event) {
+//     restaurantDB = event.target.result;
+//     //create an objectStore for restaurant data
+//     const objectStore = restaurantDB.createObjectStore("restaurants", {keyPath : "id" });
+//     addRestaurantData();
+//     //create index to search by id, name, neighborhood, or cuisine type
+//     objectStore.createIndex("id", "id");
+//     objectStore.createIndex("restaurant", "name");
+//     objectStore.createIndex("neighborhood", "neighborhood");
+//     objectStore.createIndex("cuisine", "cuisine_type");
+// }
 
-request.onerror = function(event) {
-    // Handle errors.
-    console.log("Database error: " + event.target.errorCode);
-};
-
-//Create an object store for restaurant data
-request.onupgradeneeded = function(event) {
-    restaurantDB = event.target.result;
-    //create an objectStore for restaurant data
-    const objectStore = restaurantDB.createObjectStore("restaurants", {keyPath : "id" });
-    addRestaurantData();
-    //create index to search by id, name, neighborhood, or cuisine type
-    objectStore.createIndex("id", "id");
-    objectStore.createIndex("restaurant", "name");
-    objectStore.createIndex("neighborhood", "neighborhood");
-    objectStore.createIndex("cuisine", "cuisine_type");
-}
-
-//TODO: either get the transaction to work to add the data to the indexedDB
-//OR import the idb promise library and use that instead
-
-
-//TODO: add restaurant data to indexedDB objectStore
-function addRestaurantData() {
-    console.log("running");
-    indexedDB(restaurantsDB).transaction(["restaurants"], "readwrite")
-    .then(function(transaction) {
-        DBHelper.fetchRestaurantById().forEach(function(restaurant) {
-            objectStore.add(restaurant);
-        });
-    })
-}
-
+//  //TODO: add restaurant data to indexedDB objectStore
+// function addRestaurantData() {
+//     console.log("running");
+//     indexedDB(restaurantDB).transaction(["restaurants"], "readwrite")
+//     .then(function(transaction) {
+//         fetch(DBHelper.DATABASE_URL, {method: "GET"})
+//         .then(response => {
+//                  console.log("fetching restaurant data");
+//                  return response.json();
+//                }).then(data => {
+//                     const dbData = data;
+//                     dbData.forEach(restaurant => {
+//                     objectStore.add(restaurant);
+//                     });
+//                 });
+//     });
+// };
 
 
 //============Set up the Service Worker==============

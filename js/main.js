@@ -21,6 +21,28 @@ if('serviceWorker' in navigator) {
   }
 
 
+  
+  // function storeRestaurantData() {
+  //   fetch(DBHelper.DATABASE_URL, {method: "GET"})
+  //   .then(function(response) {
+  //     console.log("fetching restaurant data");
+  //     return response.json();
+  //   }).then(function(data) {
+  //     const data = data;
+  //     dbPromise.then(function(db) {
+  //       if(!db) return;
+  //       const transaction1 = dbtransaction('restuarants', 'readwrite');
+  //       const store = transaction1.objectStore('restaurants');
+  //       console.log("storing restaurant data");
+  //       restaurants.forEach(function(restaurants) {
+  //         store.put(restaurant);
+  //       });
+  //     });
+  //   }).catch(error => {
+  //     const error = (`Request failed. Returned status of ${error}`);
+  //   });
+  // }
+
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */

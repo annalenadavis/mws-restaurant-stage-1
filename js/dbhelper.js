@@ -12,20 +12,15 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
-//TODO: refactor XMLHttpRequests to use fetch API instead X
-//TODO: Open an indexedDB and store json responses from server in it
-//TODO: create a yeoman file, then move everything into the app folder so build tool can pull from there
-//TODO: create gulp file- edit boilerplate Yoeman code>> add broswerify to get SW to work, sw task, babelify, vinyl
-//TODO: create a manifest.json file
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
     fetch(DBHelper.DATABASE_URL, {method: "GET"})
-    .then(function(response) {
+    .then(response => {
       return response.json()
-      .then(restaurants=>{
+      .then(restaurants => {
         callback(null, restaurants);
       })
       .catch(error => {
