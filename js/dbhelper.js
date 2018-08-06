@@ -1,3 +1,14 @@
+//Using code from jakearchibald idb promise library documentation
+const dbPromise = idb.open('keyval-store', 2, upgradeDB => {
+  switch (upgradeDB.oldVersion) {
+    case 0:
+      upgradeDB.createObjectStore('keyval');
+    case 1:
+      upgradeDB.createObjectStore('objs', {keyPath: 'id'});
+  }
+});
+
+
 /**
  * Common database helper functions.
  */
@@ -19,15 +30,33 @@ class DBHelper {
   static fetchRestaurants(callback) {
     fetch(DBHelper.DATABASE_URL, {method: "GET"})
     .then(response => {
-      return response.json()
+      if (response.ok) {
+        return response.json();
+        }
+      })
       .then(restaurants => {
+        dbPromise.then(db => {
+          const tx = db.transaction("objs", "readwrite");
+          const store = tx.objectStore("objs");
+          restaurants.forEach(restaurant => {
+            console.log("putting restaurants in idb")
+            store.put(restaurant)
+            })
+          });
         callback(null, restaurants);
       })
       .catch(error => {
-      callback(`Request failed. Returned ${error}`, null);
-    });
+        dbPromise.then(db => {
+          console.log(`${error}`);
+          const tx = db.transaction("objs", "readonly");
+          const store = tx.objectStore("objs");
+          store.getAll().then(allObjs => {
+            callback(null, allObjs)
+          })
+        })
+      });
   }
-)};
+
 
   /**
    * Fetch a restaurant by its ID.
