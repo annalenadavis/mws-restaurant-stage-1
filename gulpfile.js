@@ -18,7 +18,7 @@ gulp.task('default', () => {
 //compress JS
 gulp.task('compress', function (cb) {
     pump([
-          gulp.src(['js/idblibrary.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js', 'sw.js'])
+          gulp.src(['js/idblibrary.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'])
           .pipe(concat('all.js'))
           .pipe(babel({
             presets: ['env']
@@ -56,4 +56,10 @@ gulp.task('copy-images', () => {
 gulp.task('copy-manifest', () => {
     gulp.src('manifest.json')
     .pipe(gulp.dest('./dist'));
+})
+
+//copy sw.js file to dist folder
+gulp.task('copy-sw', () => {
+    gulp.src('sw.js')
+    .pipe(gulp.dest('/dist'));
 })

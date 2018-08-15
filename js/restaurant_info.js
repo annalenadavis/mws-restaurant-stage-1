@@ -19,7 +19,7 @@ if('serviceWorker' in navigator) {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
+  fetchRestaurantFromURL = ((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
