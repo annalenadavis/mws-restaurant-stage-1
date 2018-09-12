@@ -1,25 +1,11 @@
 let restaurant;
 var map;
-
-/**
- * Register Service Worker
- */
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('/sw.js')
-    .then(function(registration) {
-      // console.log("ServiceWorker registered", registration);
-    })
-    .catch(function(error) {
-      console.log("ServiceWorker failed to register", error);
-    });
-  }
-
+//UPDATED VERSION
 /**
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  fetchRestaurantFromURL = ((error, restaurant) => {
+  fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
@@ -87,7 +73,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     fillRestaurantHoursHTML();
   }
   // fill reviews
-  fillReviewsHTML();
+  DBHelper.fetchRestaurantReviews();
+  DBHelper.fetchReviewsById(self.restaurant.id);
+  // fillReviewsHTML(self.restaurant.id);
 }
 
 /**
@@ -113,7 +101,10 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = (id) => {
+  // DBHelper.fetchRestaurantReviewsById(id) {
+  //   reviews = 
+  // } TODO
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';

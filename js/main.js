@@ -160,6 +160,14 @@ createRestaurantHTML = (restaurant) => {
   image.src = DBHelper.imageUrlForRestaurantSmall(restaurant);
   li.append(image);
 
+  const favorite = document.createElement('button');
+  favorite.innerHTML = "♥";
+  favorite.setAttribute('aria-label', `Add ${restaurant.name} to your favorites`);
+  favorite.className = "favorite-button";
+  favorite.id = "favorite-" + restaurant.id;
+  li.append(favorite);
+  favorite.onclick = e => (handleClick(e));
+
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
@@ -193,4 +201,8 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     });
     self.markers.push(marker);
   });
+}
+
+const handleClick = (e) => {
+  document.getElementById(e.target.id).classList.toggle('favorite');
 }

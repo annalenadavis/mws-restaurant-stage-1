@@ -1,4 +1,7 @@
 //Using code from jakearchibald idb promise library documentation
+/**
+   * Opening an object store in indexedDB for restaurants
+   */
 const dbPromise = idb.open('keyval-store', 2, upgradeDB => {
   switch (upgradeDB.oldVersion) {
     case 0:
@@ -7,7 +10,17 @@ const dbPromise = idb.open('keyval-store', 2, upgradeDB => {
       upgradeDB.createObjectStore('objs', {keyPath: 'id'});
   }
 });
-
+/**
+   * Opening an object store in indexedDB for reviews
+   */
+  const dbReviews = idb.open('reviews-store', 2, upgradeDB => {
+    switch (upgradeDB.oldVersion) {
+      case 0:
+        upgradeDB.createObjectStore('reviews1');
+      case 1:
+        upgradeDB.createObjectStore('reviews2', {keyPath: 'id'});
+    }
+  });
 
 /**
  * Common database helper functions.
@@ -22,10 +35,13 @@ class DBHelper {
     const port = 1337 // Change this to your server port
     return `http://localhost:${port}/restaurants`;
   }
-
+  static get DATABASE_REVIEWS_URL() {
+    const port =  1337 //Change this to your server port
+    return `http://localhost:${port}/reviews`;
+  }
 
   /**
-   * Fetch all restaurants.
+   * Fetch all restaurants and store in indexedDB
    */
   static fetchRestaurants(callback) {
     fetch(DBHelper.DATABASE_URL, {method: "GET"})
@@ -57,6 +73,55 @@ class DBHelper {
       });
   }
 
+      /**
+   * Fetch all reviews & store in indexedDB
+   */
+  static fetchRestaurantReviews() {
+    fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+        }
+      })
+      .then(reviews => {
+        dbReviews.then(db => {
+          const tx = db.transaction("reviews2", "readwrite");
+          const store = tx.objectStore("reviews2");
+          reviews.forEach(review => {
+            console.log("putting reviews in idb")
+            store.put(review)
+            })
+          });
+      })
+      .catch(error => {
+        dbReviews.then(db => {
+          console.log(`${error}`);
+          const tx = db.transaction("reviews2", "readonly");
+          const store = tx.objectStore("reviews2");
+          store.getAll();
+          })
+        })
+      };
+
+      static fetchReviewsById(id) {
+        fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+            }
+          })
+          .then(reviews => {
+              reviews.forEach(review => {
+                if (id == review.restaurant_id) {
+                  console.log(reviews);
+                  // TODO
+                }
+              })
+          })
+          .catch(error => {
+              console.log(`${error}`);
+            })
+          };
 
   /**
    * Fetch a restaurant by its ID.
