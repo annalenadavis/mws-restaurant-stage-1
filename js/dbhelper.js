@@ -76,7 +76,7 @@ class DBHelper {
       /**
    * Fetch all reviews & store in indexedDB
    */
-  static fetchRestaurantReviews() {
+  static fetchRestaurantReviews(callback) {
     fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
     .then(response => {
       if (response.ok) {
@@ -88,40 +88,23 @@ class DBHelper {
           const tx = db.transaction("reviews2", "readwrite");
           const store = tx.objectStore("reviews2");
           reviews.forEach(review => {
-            console.log("putting reviews in idb")
             store.put(review)
+            console.log("putting reviews in idb")
             })
           });
+          callback(null, reviews);
       })
       .catch(error => {
         dbReviews.then(db => {
           console.log(`${error}`);
           const tx = db.transaction("reviews2", "readonly");
           const store = tx.objectStore("reviews2");
-          store.getAll();
-          })
+          store.getAll().then(allObjs => {
+            callback(null, allObjs)
+          });
         })
-      };
-
-      static fetchReviewsById(id) {
-        fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-            }
-          })
-          .then(reviews => {
-              reviews.forEach(review => {
-                if (id == review.restaurant_id) {
-                  console.log(reviews);
-                  // TODO
-                }
-              })
-          })
-          .catch(error => {
-              console.log(`${error}`);
-            })
-          };
+      })
+    };
 
   /**
    * Fetch a restaurant by its ID.

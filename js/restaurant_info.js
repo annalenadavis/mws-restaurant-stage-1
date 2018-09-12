@@ -1,6 +1,5 @@
 let restaurant;
 var map;
-//UPDATED VERSION
 /**
  * Initialize Google map, called from HTML.
  */
@@ -72,10 +71,30 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  DBHelper.fetchRestaurantReviews();
-  DBHelper.fetchReviewsById(self.restaurant.id);
-  // fillReviewsHTML(self.restaurant.id);
+  // fetch reviews
+  fetchReviews();
+}
+
+/**
+ * Fetch all reviews and set their HTML.
+ */
+fetchReviews = () => {
+  const id = self.restaurant.id;
+  DBHelper.fetchRestaurantReviews((error, reviews) => {
+    if (error) {
+      callback(error, null);
+    } else {
+      let reviewsById = [];
+      reviews.forEach(review => {
+        if (id == review.restaurant_id) {
+          reviewsById.push(review);
+        }
+      });
+      self.restaurant.reviews = reviewsById;
+      fillReviewsHTML();
+      // callback(null, reviewsById);
+    };
+  });
 }
 
 /**
@@ -101,15 +120,11 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (id) => {
-  // DBHelper.fetchRestaurantReviewsById(id) {
-  //   reviews = 
-  // } TODO
+fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
-
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
