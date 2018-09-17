@@ -95,17 +95,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fetchReviews = () => {
   const id = self.restaurant.id;
-  DBHelper.fetchRestaurantReviews((error, reviews) => {
+  DBHelper.fetchReviewsById(id, (error, reviews) => {
     if (error) {
       callback(error, null);
     } else {
-      let reviewsById = [];
-      reviews.forEach(review => {
-        if (id == review.restaurant_id) {
-          reviewsById.push(review);
-        }
-      });
-      self.restaurant.reviews = reviewsById;
+      self.restaurant.reviews = reviews;
       fillReviewsHTML();
     };
   });
@@ -163,7 +157,8 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  readableDate = new Date(review.createdAt);
+  date.innerHTML = readableDate.toDateString();
   date.className = 'review-date';
   li.appendChild(date);
 
@@ -214,6 +209,7 @@ function handleReviewForm(e) {
   // prevent page refresh
   e.preventDefault();
   // get input from form
+  const form = document.getElementById('review-form');
   const name = document.getElementById('review-name').value;
   const rating = document.getElementById('rating').value;
   const comments = document.getElementById('comments').value;
@@ -231,22 +227,20 @@ function handleReviewForm(e) {
   // if online load data into idb and save to server
   if(navigator.onLine){
     DBHelper.addReview(newReview);
-    // TODO: new reviews aren't showing in UI- 
-    // API will only return 30 reviews so need to refactor original fetch function to just grab reviews for specific restaurant, not all
   } else {
     // if offline save review into local storage
     localStorage.setItem('newReview', JSON.stringify(newReview));
     console.log('review saved to local storage')
-    window.addEventListener("navigator.onLine", function(){
-      localStorage.removeItem(newReview);
+    // listen for when back online, then add review to server
+    window.addEventListener("online", function(){
       DBHelper.addReview(newReview);
+      localStorage.clear();
       console.log("back online- added review to server and idb")
     })
   }
-  // show in UI  
+  // show in UI and reset form
   ul.appendChild(createReviewHTML(newReview));
-  // TODO: clear form and notify user form has been submitted
+  form.reset();
 };
 
 reviewForm.addEventListener('submit', handleReviewForm);
-

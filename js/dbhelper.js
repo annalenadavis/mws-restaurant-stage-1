@@ -73,38 +73,47 @@ class DBHelper {
       });
   }
 
-      /**
-   * Fetch all reviews & store in indexedDB
+  /** 
+   * Fetch reviews by restaurant id and store in idb
    */
-    static fetchRestaurantReviews(callback) {
-      fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-          }
-        })
-        .then(reviews => {
-          dbReviews.then(db => {
-            const tx = db.transaction("reviews2", "readwrite");
-            const store = tx.objectStore("reviews2");
-            reviews.forEach(review => {
-              console.log("putting reviews in idb")
-              store.put(review)
-              })
-            });
-            callback(null, reviews);
-        })
-        .catch(error => {
-          dbReviews.then(db => {
-            console.log(`${error}`);
-            const tx = db.transaction("reviews2", "readonly");
-            const store = tx.objectStore("reviews2");
-            store.getAll().then(allObjs => {
-              callback(null, allObjs)
+  static fetchReviewsById(id, callback) {
+    const fetchURL = DBHelper.DATABASE_REVIEWS_URL + "/?restaurant_id=" + id;
+    fetch(fetchURL, {
+      method: "GET",
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+        }
+      })
+      .then(reviews => {
+        dbReviews.then(db => {
+          const tx = db.transaction("reviews2", "readwrite");
+          const store = tx.objectStore("reviews2");
+          reviews.forEach(review => {
+            console.log("putting reviews in idb")
+            store.put(review)
             })
+          });
+          callback(null, reviews);
+      })
+      .catch(error => {
+        dbReviews.then(db => {
+          console.log(`${error}`);
+          const tx = db.transaction("reviews2", "readonly");
+          const store = tx.objectStore("reviews2");
+          store.getAll().then(reviews => {
+            let reviewsById = [];
+            reviews.forEach(review => {
+              if (id == review.restaurant_id) {
+                reviewsById.push(review);
+              }
+            });
+            callback(null, reviewsById)
           })
         })
-      };
+      })
+    };
 
   /**
    * Add a single review to idb and server
@@ -197,11 +206,11 @@ class DBHelper {
   }
 
   /**
-   * Fetch all neighborhoods with proper error handling.
+   * Fetch all neighborhoods and cuisines with proper error handling.
    */
-  static fetchNeighborhoods(callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
+  static fetchNeighborhoodsAndCuisines(callback) {
+    // Fetch all restaurants and cuisines
+    DBHelper.fetchRestaurants((error, restaurants, cuisines) => {
       if (error) {
         callback(error, null);
       } else {
@@ -209,25 +218,11 @@ class DBHelper {
         const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
         // Remove duplicates from neighborhoods
         const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
-        callback(null, uniqueNeighborhoods);
-      }
-    });
-  }
-
-  /**
-   * Fetch all cuisines with proper error handling.
-   */
-  static fetchCuisines(callback) {
-    // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Get all cuisines from all restaurants
-        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
-        // Remove duplicates from cuisines
-        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
-        callback(null, uniqueCuisines);
+                // Get all cuisines from all restaurants
+                const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
+                // Remove duplicates from cuisines
+                const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
+        callback(null, uniqueNeighborhoods, uniqueCuisines);
       }
     });
   }

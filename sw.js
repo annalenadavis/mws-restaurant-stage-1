@@ -1,13 +1,13 @@
 
 //============Set up the Service Worker==============
-const cacheName = 'v2';
+const cacheName = 'v3';
 const cacheFiles = [
     './',
     './index.html',
     './restaurant.html',
     './css/styles.css',
     './manifest.json',
-    './js/idbLibrary',
+    './js/idbLibrary.js',
     './js/dbhelper.js',
     './js/main.js',
     './js/restaurant_info.js',
@@ -35,11 +35,11 @@ const cacheFiles = [
 ]
 
 self.addEventListener('install', function(event) {
-    console.log('ServiceWorker installed');
+    // console.log('ServiceWorker installed');
 
     event.waitUntil(
         caches.open(cacheName).then(function(cache) {
-            console.log('ServiceWorker Caching cacheFiles');
+            // console.log('ServiceWorker Caching cacheFiles');
             return cache.addAll(cacheFiles);
         }).then(function() {
             return self.skipWaiting();
@@ -48,7 +48,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('activate', function(event) {
-    console.log('ServiceWorker activated');
+    // console.log('ServiceWorker activated');
 
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -63,7 +63,7 @@ self.addEventListener('activate', function(event) {
 })
 
 self.addEventListener('fetch', function(event) {
-       console.log('ServiceWorker fetching', event.request.url);
+    //    console.log('ServiceWorker fetching', event.request.url);
 
       event.respondWith(
         caches.match(event.request)
