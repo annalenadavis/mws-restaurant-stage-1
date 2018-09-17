@@ -76,35 +76,53 @@ class DBHelper {
       /**
    * Fetch all reviews & store in indexedDB
    */
-  static fetchRestaurantReviews(callback) {
-    fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-        }
-      })
-      .then(reviews => {
-        dbReviews.then(db => {
-          const tx = db.transaction("reviews2", "readwrite");
-          const store = tx.objectStore("reviews2");
-          reviews.forEach(review => {
-            store.put(review)
-            console.log("putting reviews in idb")
-            })
-          });
-          callback(null, reviews);
-      })
-      .catch(error => {
-        dbReviews.then(db => {
-          console.log(`${error}`);
-          const tx = db.transaction("reviews2", "readonly");
-          const store = tx.objectStore("reviews2");
-          store.getAll().then(allObjs => {
-            callback(null, allObjs)
-          });
+    static fetchRestaurantReviews(callback) {
+      fetch(DBHelper.DATABASE_REVIEWS_URL, {method: "GET"})
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+          }
         })
+        .then(reviews => {
+          dbReviews.then(db => {
+            const tx = db.transaction("reviews2", "readwrite");
+            const store = tx.objectStore("reviews2");
+            reviews.forEach(review => {
+              console.log("putting reviews in idb")
+              store.put(review)
+              })
+            });
+            callback(null, reviews);
+        })
+        .catch(error => {
+          dbReviews.then(db => {
+            console.log(`${error}`);
+            const tx = db.transaction("reviews2", "readonly");
+            const store = tx.objectStore("reviews2");
+            store.getAll().then(allObjs => {
+              callback(null, allObjs)
+            })
+          })
+        })
+      };
+
+  /**
+   * Add a single review to idb and server
+  */
+  static addReview(newReview) {
+    dbReviews.then(db => {
+      const tx = db.transaction("reviews2", "readwrite");
+      const store = tx.objectStore("reviews2");
+      store.put(newReview);
+      console.log('adding new review to idb');
+    })
+    .then(
+      fetch(DBHelper.DATABASE_REVIEWS_URL, {
+        method: "POST",
+        body: JSON.stringify(newReview)
       })
-    };
+    )
+  }
 
   /**
    * Fetch a restaurant by its ID.

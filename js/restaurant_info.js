@@ -1,5 +1,20 @@
 let restaurant;
 var map;
+
+/**
+ * Register Service Worker
+ */
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(function(registration) {
+      // console.log("ServiceWorker registered", registration);
+    })
+    .catch(function(error) {
+      console.log("ServiceWorker failed to register", error);
+    });
+  }
+
 /**
  * Initialize Google map, called from HTML.
  */
@@ -92,7 +107,6 @@ fetchReviews = () => {
       });
       self.restaurant.reviews = reviewsById;
       fillReviewsHTML();
-      // callback(null, reviewsById);
     };
   });
 }
@@ -190,3 +204,49 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+const reviewForm = document.getElementById('review-form');
+
+/**
+ * Handle submit of review form
+ */
+function handleReviewForm(e) {
+  // prevent page refresh
+  e.preventDefault();
+  // get input from form
+  const name = document.getElementById('review-name').value;
+  const rating = document.getElementById('rating').value;
+  const comments = document.getElementById('comments').value;
+  const ul = document.getElementById('reviews-list');
+  // create object with review info
+  const newReview = {
+    id: + new Date(),
+    restaurant_id: self.restaurant.id,
+    name: name,
+    createdAt: + new Date(),
+    updatedAt: + new Date(),
+    rating: rating,
+    comments: comments
+  }
+  // if online load data into idb and save to server
+  if(navigator.onLine){
+    DBHelper.addReview(newReview);
+    // TODO: new reviews aren't showing in UI- 
+    // API will only return 30 reviews so need to refactor original fetch function to just grab reviews for specific restaurant, not all
+  } else {
+    // if offline save review into local storage
+    localStorage.setItem('newReview', JSON.stringify(newReview));
+    console.log('review saved to local storage')
+    window.addEventListener("navigator.onLine", function(){
+      localStorage.removeItem(newReview);
+      DBHelper.addReview(newReview);
+      console.log("back online- added review to server and idb")
+    })
+  }
+  // show in UI  
+  ul.appendChild(createReviewHTML(newReview));
+  // TODO: clear form and notify user form has been submitted
+};
+
+reviewForm.addEventListener('submit', handleReviewForm);
+

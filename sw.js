@@ -35,11 +35,11 @@ const cacheFiles = [
 ]
 
 self.addEventListener('install', function(event) {
-    // console.log('ServiceWorker installed');
+    console.log('ServiceWorker installed');
 
     event.waitUntil(
         caches.open(cacheName).then(function(cache) {
-            // console.log('ServiceWorker Caching cacheFiles');
+            console.log('ServiceWorker Caching cacheFiles');
             return cache.addAll(cacheFiles);
         }).then(function() {
             return self.skipWaiting();
@@ -48,13 +48,13 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('activate', function(event) {
-    // console.log('ServiceWorker activated');
+    console.log('ServiceWorker activated');
 
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(cacheNames.map(thisCacheName => {
                 if(thisCacheName !== cacheName) {
-                    // console.log('ServiceWorker Removing cache files from ', thisCacheName);
+                    console.log('ServiceWorker Removing cache files from ', thisCacheName);
                     return caches.delete(thisCacheName);
                 }
             }));
@@ -63,7 +63,7 @@ self.addEventListener('activate', function(event) {
 })
 
 self.addEventListener('fetch', function(event) {
-    //    console.log('ServiceWorker fetching', event.request.url);
+       console.log('ServiceWorker fetching', event.request.url);
 
       event.respondWith(
         caches.match(event.request)
