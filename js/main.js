@@ -143,9 +143,34 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.setAttribute('alt', `Photo of ${restaurant.name}`);
-  image.src = DBHelper.imageUrlForRestaurantSmall(restaurant);
+  //Lazy Loading using Intersection Observer
+  const config = {
+    // If the image gets within 50px in the Y axis, start the download.
+    rootMargin: '50px 0px',
+    threshold: 0.01
+  };
+  let observer;
+  const loadImage =  image => {
+    image.className = 'restaurant-img';
+    image.src = DBHelper.imageUrlForRestaurantSmall(restaurant);
+    image.setAttribute('alt', `Photo of ${restaurant.name}`);
+  };
+  if (!('IntersectionObserver' in window)) {
+    loadImage(image);
+  } else {
+    // It is supported, load the images
+    observer = new IntersectionObserver(onIntersection, config);
+    observer.observe(image)
+  }
+  function onIntersection(entries, observer) {
+    entries.forEach(entry => {
+      if(entry.intersectionRatio > 0) {
+        loadImage(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }
+
   li.append(image);
 
   const favorite = document.createElement('button');
