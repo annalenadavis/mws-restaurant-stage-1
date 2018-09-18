@@ -25,6 +25,7 @@ if('serviceWorker' in navigator) {
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoodsAndCuisines();
+  updateRestaurants();
 });
 
 /**
@@ -132,7 +133,6 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     ul.append(createRestaurantHTML(restaurant));
   });
-  addMarkersToMap();
   updateFavoritesUI();
 }
 
@@ -242,3 +242,17 @@ const handleClick = (e) => {
     }
   DBHelper.updateFavorites(id);
 }
+
+/**
+ * Hide static map and make interactive google map available
+ */
+const staticMap = document.getElementById('staticMap');
+
+const switchMaps = (e) => {
+  const interactiveMap = document.querySelector('.hiddenMap');
+  staticMap.style.display="none";
+  interactiveMap.style.display="block";
+  addMarkersToMap();
+}
+
+staticMap.addEventListener('click', switchMaps);

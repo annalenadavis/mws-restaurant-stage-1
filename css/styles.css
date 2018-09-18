@@ -243,6 +243,13 @@ nav h1 a {
   width: 100%;
   z-index: 1000;
 }
+.static-map {
+  height: 40vh;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-image: url(https://maps.googleapis.com/maps/api/staticmap?center=new+york,+ny&zoom=12&scale=1&size=640x640&maptype=roadmap&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C171+E+Broadway,+New+York,+NY+10002&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C919+Fulton+St,+Brooklyn,+NY+11238&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C1+E+32nd+St,+New+York,+NY+10016&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C205+E+Houston+St,+New+York,+NY+10002&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C261+Moore+St,+Brooklyn,+NY+11206&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C454+Van+Brunt+St,+Brooklyn,+NY+11231&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C430+E+9th+St,+New+York,+NY+10009&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C131+Sullivan+St,+New+York,+NY+10012&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C1209+Jackson+Ave,+Queens,+NY+11101&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C5-48+49th+Ave,+Queens,+NY+11101);
+}
 .inside #map-container {
   background: blue none repeat scroll 0 0;
   height: 60vh;
@@ -252,6 +259,9 @@ nav h1 a {
   background-color: #ccc;
   height: 100%;
   width: 100%;
+}
+.hiddenMap {
+  display: none;
 }
 .inside #footer {
   bottom: 0;

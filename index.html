@@ -25,7 +25,8 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map" role="application" aria-label="map of resturants"></div>
+      <div class="static-map" id="staticMap" aria-label="map of restaurants" role="img" tabindex="0"></div>
+      <div id="map" class="hiddenMap" role="application" aria-label="map of resturants"></div>
     </section>
     <section>
       <form class="filter-options">
@@ -50,7 +51,18 @@
   <footer id="footer">
     Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
-
+  <!-- <script type="text/javascript">
+    function downloadJSAtOnload() {
+    var element = document.createElement("script");
+    element.src = "https://maps.googleapis.com/maps/api/js?&libraries=places&callback=initMap&key=AIzaSyA4GHFOFyAxrM7vzvj1qGxVvGxBryUngGg";
+    document.body.appendChild(element);
+    }
+    if (window.addEventListener)
+    window.addEventListener("load", downloadJSAtOnload, false);
+    else if (window.attachEvent)
+    window.attachEvent("onload", downloadJSAtOnload);
+    else window.onload = downloadJSAtOnload;
+  </script> -->
 </body>
 
 </html>

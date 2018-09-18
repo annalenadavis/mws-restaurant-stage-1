@@ -82,9 +82,20 @@
   <!-- Main javascript file -->
   <script type="text/javascript" src="js/restaurant_info.js"></script>
   <!-- Google Maps -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?&libraries=places&callback=initMap&key=AIzaSyA4GHFOFyAxrM7vzvj1qGxVvGxBryUngGg"></script>
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?&libraries=places&callback=initMap&key=AIzaSyA4GHFOFyAxrM7vzvj1qGxVvGxBryUngGg"></script> -->
   <!-- End scripts -->
-
+  <script type="text/javascript">
+    function downloadJSAtOnload() {
+    var element = document.createElement("script");
+    element.src = "https://maps.googleapis.com/maps/api/js?&libraries=places&callback=initMap&key=AIzaSyA4GHFOFyAxrM7vzvj1qGxVvGxBryUngGg";
+    document.body.appendChild(element);
+    }
+    if (window.addEventListener)
+    window.addEventListener("load", downloadJSAtOnload, false);
+    else if (window.attachEvent)
+    window.attachEvent("onload", downloadJSAtOnload);
+    else window.onload = downloadJSAtOnload;
+  </script>
 </body>
 
 </html>
