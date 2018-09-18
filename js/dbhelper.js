@@ -22,6 +22,8 @@ const dbPromise = idb.open('keyval-store', 2, upgradeDB => {
     }
   });
 
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
 /**
  * Common database helper functions.
  */
@@ -225,6 +227,20 @@ class DBHelper {
         callback(null, uniqueNeighborhoods, uniqueCuisines);
       }
     });
+  }
+
+  /**
+   * Update favorite restaurants list in local storage
+   */
+  static updateFavorites(id) {
+    if(favorites.includes(id)) {
+      //if already on list, filter it out and return rest of favs
+      favorites = favorites.filter(item => item !== id)
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    } else {
+      favorites.push(id);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
   }
 
   /**

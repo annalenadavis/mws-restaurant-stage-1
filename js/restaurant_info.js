@@ -234,7 +234,7 @@ function handleReviewForm(e) {
     // listen for when back online, then add review to server
     window.addEventListener("online", function(){
       DBHelper.addReview(newReview);
-      localStorage.clear();
+      localStorage.removeItem('newReview');
       console.log("back online- added review to server and idb")
     })
   }

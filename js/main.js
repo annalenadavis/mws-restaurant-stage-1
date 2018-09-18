@@ -133,6 +133,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
+  updateFavoritesUI();
 }
 
 /**
@@ -189,7 +190,30 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 }
-
+/**
+ * Update favorite button hearts after page loads
+ */
+function updateFavoritesUI() {
+  favorites.forEach(id => {
+    let favoriteBtnId = 'favorite-' + id;
+    let favoriteBtn = document.getElementById(favoriteBtnId)
+    favoriteBtn.classList.add('favorite');
+    favoriteBtn.setAttribute('aria-label', `remove as favorite`);
+  })
+}
+/**
+ * Handle click of a favorite heart on a restaurant
+ */
 const handleClick = (e) => {
-  document.getElementById(e.target.id).classList.toggle('favorite');
+  const btn = document.getElementById(e.target.id);
+  const id = (e.target.id).slice(9);
+  console.log(btn);
+    if (btn.classList.contains('favorite')){
+      btn.classList.remove('favorite');
+      btn.setAttribute('aria-label', `add as favorite`);
+    } else {
+      btn.classList.add('favorite');
+      btn.setAttribute('aria-label', `remove as favorite`);
+    }
+  DBHelper.updateFavorites(id);
 }
